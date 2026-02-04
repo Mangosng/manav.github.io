@@ -1,0 +1,417 @@
+[
+  {
+    "id": "q1",
+    "value": 4,
+    "text": "They offer you food or other consumables."
+  },
+  {
+    "id": "q2",
+    "value": 8,
+    "text": "They initiate conversation frequently."
+  },
+  {
+    "id": "q3",
+    "value": 12,
+    "text": "They remember small details about you."
+  },
+  {
+    "id": "q4",
+    "value": 12,
+    "text": "They laugh at your jokes even though you aren't funny like that."
+  },
+  {
+    "id": "q5",
+    "value": -5,
+    "text": "They rarely respond to your messages."
+  },
+  {
+    "id": "q6",
+    "value": 6,
+    "text": "Your friends think they like you."
+  },
+  {
+    "id": "q7",
+    "value": -8,
+    "text": "They remove you from close friends."
+  },
+  {
+    "id": "q8",
+    "value": 6,
+    "text": "They offer to help with small tasks."
+  },
+  {
+    "id": "q9",
+    "value": 10,
+    "text": "You guys have inside jokes."
+  },
+  {
+    "id": "q11",
+    "value": 6,
+    "text": "They ask personal questions."
+  },
+  {
+    "id": "q12",
+    "value": 8,
+    "text": "They remember a topic you mentioned previously."
+  },
+  {
+    "id": "q13",
+    "value": 15,
+    "text": "Their friend says you two look good together."
+  },
+  {
+    "id": "q14",
+    "value": 9,
+    "text": "Their friends already know you before you have met them."
+  },
+  {
+    "id": "q15",
+    "value": 30,
+    "text": "They ask you on a date."
+  },
+  {
+    "id": "q18",
+    "value": -8,
+    "text": "They’re flirty with everyone."
+  },
+  {
+    "id": "q19",
+    "value": 12,
+    "text": "They show interest in your hobbies."
+  },
+  {
+    "id": "q22",
+    "value": 10,
+    "text": "They tease you."
+  },
+  {
+    "id": "q23",
+    "value": 6,
+    "text": "They get shy around you."
+  },
+  {
+    "id": "q24",
+    "value": 6,
+    "text": "They text after the hangout."
+  },
+  {
+    "id": "q25",
+    "value": 12,
+    "text": "Mention you to friends or family."
+  },
+  {
+    "id": "q26",
+    "value": 10,
+    "text": "They like your stories consistantly."
+  },
+  {
+    "id": "q27",
+    "value": 2,
+    "text": "They ask about your friends."
+  },
+  {
+    "id": "q28",
+    "value": 15,
+    "text": "Their friends giggle around you or at your mention."
+  },
+  {
+    "id": "q29",
+    "value": 8,
+    "text": "They double text you."
+  },
+  {
+    "id": "q30",
+    "value": 6,
+    "text": "They comment on your posts."
+  },
+  {
+    "id": "q31",
+    "value": 6,
+    "text": "You guys maintain long eye contact.(more than 3 seconds)"
+  },
+  {
+    "id": "q32",
+    "value": -3,
+    "text": "Are you delusional?"
+  },
+  {
+    "id": "q33",
+    "value": 15,
+    "text": "They make one on one plans with you."
+  },
+  {
+    "id": "q34",
+    "value": 6,
+    "text": "They add you to their close friends."
+  },
+  {
+    "id": "q35",
+    "value": 15,
+    "text": "They send you things and say it reminded them of you."
+  },
+  {
+    "id": "q36",
+    "value": -30,
+    "text": "They ask you if your friend is dating anyone."
+  },
+  {
+    "id": "q37",
+    "value": -17,
+    "text": "They never initiate anything."
+  },
+  {
+    "id": "q38",
+    "value": 2,
+    "text": "They ask for your Snapchat."
+  },
+  {
+    "id": "q40",
+    "value": 10,
+    "text": "They make something, and coincidentally happen to give it to you."
+  },
+  {
+    "id": "q41",
+    "value": -15,
+    "text": "They randomly reappear after ghosting you."
+  },
+  {
+    "id": "q42",
+    "value": 13,
+    "text": "Their friends tease them when you’re around."
+  },
+  {
+    "id": "q43",
+    "value": -15,
+    "text": "They cancel plans vaguely."
+  },
+  {
+    "id": "q44",
+    "value": 6,
+    "text": "They send you reels."
+  },
+  {
+    "id": "q45",
+    "value": 20,
+    "text": "They make something for you specifically."
+  },
+  {
+    "id": "q46",
+    "value": -20,
+    "text": "They talk about someone their “friends” with."
+  },
+  {
+    "id": "q47",
+    "value": 4,
+    "text": "Do you think they like you?"
+  },
+  {
+    "id": "q48",
+    "value": -12,
+    "text": "They say they’re emotionally unavailable."
+  },
+  {
+    "id": "q49",
+    "value": 30,
+    "text": "They have told you they like you romantically."
+  },
+  {
+    "id": "q50",
+    "value": 15,
+    "text": "They ask your friends if you are dating anyone."
+  },
+  {
+    "id": "q51",
+    "value": -6,
+    "text": "They compliment other people around you."
+  },
+  {
+    "id": "q52",
+    "value": 20,
+    "text": "They find excuses to touch you."
+  },
+  {
+    "id": "q54",
+    "value": 6,
+    "text": "They ask for your instagram."
+  },
+  {
+    "id": "q55",
+    "value": -6,
+    "text": "They like thirst traps on Instagram."
+  },
+  {
+    "id": "q56",
+    "value": -25,
+    "text": "They soft launch someone else."
+  },
+  {
+    "id": "q57",
+    "value": 10,
+    "text": "Ask if you are dating someone."
+  },
+  {
+    "id": "q58",
+    "value": -20,
+    "text": "They try and set you up with their friend."
+  },
+  {
+    "id": "q61",
+    "value": -10,
+    "text": "They send mixed signals then play dumb."
+  },
+  {
+    "id": "q62",
+    "value": 8,
+    "text": "You catch them looking at you often."
+  },
+  {
+    "id": "q63",
+    "value": -18,
+    "text": "They ignore you consistently."
+  },
+  {
+    "id": "q64",
+    "value": 11,
+    "text": "They remember specific event dates."
+  },
+  {
+    "id": "q65",
+    "value": -40,
+    "text": "They say you remind them of their sibling."
+  },
+  {
+    "id": "q66",
+    "value": -15,
+    "text": "They leave you on sent for a long time consistently (over a day)."
+  },
+  {
+    "id": "q68",
+    "value": 13,
+    "text": "They liked one of your old posts."
+  },
+  {
+    "id": "q69",
+    "value": 6,
+    "text": "They talk about their accomplishments."
+  },
+  {
+    "id": "q70",
+    "value": -20,
+    "text": "They don’t ask you any questions about you."
+  },
+  {
+    "id": "q71",
+    "value": 6,
+    "text": "They compliment your personality."
+  },
+  {
+    "id": "q72",
+    "value": 8,
+    "text": "They try and impress your friends."
+  },
+  {
+    "id": "q73",
+    "value": -15,
+    "text": "They dont believe in relationships."
+  },
+  {
+    "id": "q74",
+    "value": 5,
+    "text": "They face you when sitting/standing."
+  },
+  {
+    "id": "q76",
+    "value": -20,
+    "text": "They say they arent ready for a relationship."
+  },
+  {
+    "id": "q78",
+    "value": 18,
+    "text": "They say things like I’ve never met someone like you."
+  },
+  {
+    "id": "q79",
+    "value": 15,
+    "text": "They ask for your number."
+  },
+  {
+    "id": "q80",
+    "value": -2,
+    "text": "They don’t talk about a future with you."
+  },
+  {
+    "id": "q81",
+    "value": 8,
+    "text": "They look at you while laughing."
+  },
+  {
+    "id": "q82",
+    "value": 7,
+    "text": "They find an excuse to text."
+  },
+  {
+    "id": "q83",
+    "value": 6,
+    "text": "They randomly appear where you are."
+  },
+  {
+    "id": "q84",
+    "value": 6,
+    "text": "They notice small changes about you."
+  },
+  {
+    "id": "q85",
+    "value": 6,
+    "text": "They ask if you got home safe."
+  },
+  {
+    "id": "q86",
+    "value": 8,
+    "text": "They compliment your physical appearance."
+  },
+  {
+    "id": "q87",
+    "value": -8,
+    "text": "They only message late at night."
+  },
+  {
+    "id": "q88",
+    "value": -40,
+    "text": "They hard launch someone else."
+  },
+  {
+    "id": "q89",
+    "value": 10,
+    "text": "They send you couple esque reels."
+  },
+  {
+    "id": "q90",
+    "value": -10,
+    "text": "They talk about their ex."
+  },
+  {
+    "id": "q91",
+    "value": -20,
+    "text": "They mention their current partner."
+  },
+  {
+    "id": "q93",
+    "value": 8,
+    "text": "They mention you to your friends."
+  },
+  {
+    "id": "q94",
+    "value": 8,
+    "text": "They stutter around you."
+  },
+  {
+    "id": "q96",
+    "value": 4,
+    "text": "They invite to a group hangout or event."
+  },
+  {
+    "id": "q97",
+    "value": 15,
+    "text": "They give you a nickname."
+  }
+]

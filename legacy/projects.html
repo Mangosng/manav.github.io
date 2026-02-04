@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects | Manav</title>
+  <link rel="icon" type="image/x-icon" href="heartfavicon.png" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          display: ["Special Elite", "monospace"],
+          body: ["IBM Plex Mono", "monospace"],
+        },
+        colors: {
+          dark: "#111111",
+          grayish: "#1b1b1b",
+          mid: "#2a2a2a",
+          light: "#d1d1d1",
+          accent: "#e5e5e5",
+        },
+      },
+    },
+  };
+</script>
+
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@700&display=swap" rel="stylesheet">
+</head>
+<body class="min-h-screen flex flex-col font-body bg-dark text-light">
+
+  <!-- HEADER -->
+  <header class="bg-grayish border-b border-light/10 sticky top-0 z-50 shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+    <nav class="container mx-auto flex justify-center py-4 space-x-10 text-lg font-semibold uppercase tracking-wide">
+      <a href="index.html" class="text-light/80 hover:text-accent hover:tracking-wider transition-all duration-300">Home</a>
+      <a href="projects.html" class="text-accent hover:tracking-wider transition-all duration-300">Projects</a>
+      <a href="cv.html" class="text-light/80 hover:text-accent hover:tracking-wider transition-all duration-300">CV</a>
+    </nav>
+  </header>
+
+  <!-- MAIN -->
+  <main class="flex-grow flex flex-col items-center justify-start py-16 px-6">
+    <h1 class="font-display text-4xl md:text-5xl font-bold mb-12 tracking-tight text-center">My Projects</h1>
+
+    <!-- Centered Project Section -->
+    <section class="flex justify-center items-center w-full">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl w-full justify-items-center">
+
+        <a href="do-they-like-me.html" class="group bg-grayish border border-light/10 rounded-2xl p-8 hover:bg-mid hover:border-light/30 transition-all duration-300 flex flex-col items-center text-center shadow-[0_0_20px_rgba(255,255,255,0.03)] hover:shadow-[0_0_25px_rgba(255,255,255,0.08)] max-w-sm">
+          <div class="flex items-center justify-center mb-6 text-5xl text-accent/70 group-hover:text-accent transition-all duration-300">
+            <i class="fas fa-heart"></i>
+          </div>
+          <h3 class="font-display text-2xl font-semibold mb-3">Do They Like Me Quiz</h3>
+          <p class="text-light/70 text-base leading-relaxed"> Find out if they like you, or not</p>
+        </a>
+        <a href="are-you-compatible.html" class="group bg-grayish border border-light/10 rounded-2xl p-8 hover:bg-mid hover:border-light/30 transition-all duration-300 flex flex-col items-center text-center shadow-[0_0_20px_rgba(255,255,255,0.03)] hover:shadow-[0_0_25px_rgba(255,255,255,0.08)] max-w-sm">
+          <div class="flex items-center justify-center mb-6 text-5xl text-accent/70 group-hover:text-accent transition-all duration-300">
+            <i class="fas fa-heart"></i>
+          </div>
+          <h3 class="font-display text-2xl font-semibold mb-3">Compatibility Quiz</h3>
+          <p class="text-light/70 text-base leading-relaxed"> Find out if you both are compatible</p>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-grayish border-t border-light/10 mt-16 py-8 flex flex-col items-center text-center text-sm">
+    <div class="flex space-x-6 mb-4">
+      <a href="https://instagram.com/manav.2009" target="_blank" aria-label="Instagram" class="hover:text-accent transition">
+        <i class="fab fa-instagram text-xl"></i>
+      </a>
+      <a href="https://github.com/ManavSanghrajka" target="_blank" aria-label="GitHub" class="hover:text-accent transition">
+        <i class="fab fa-github text-xl"></i>
+      </a>
+      <a href="https://open.spotify.com/user/316ntxr3gfsimuv6cwvsg3dabxn4" target="_blank" aria-label="Spotify" class="hover:text-accent transition">
+        <i class="fab fa-spotify text-xl"></i>
+      </a>
+      <a href="https://linkedin.com/in/manav-sanghrajka-654a73363/" target="_blank" aria-label="LinkedIn" class="hover:text-accent transition">
+        <i class="fab fa-linkedin text-xl"></i>
+      </a>
+      <a href="mailto:manavsanghrajka@gmail.com" aria-label="Email" class="hover:text-accent transition">
+        <i class="fas fa-envelope text-xl"></i>
+      </a>
+    </div>
+    <p class="text-light/60">© 2025 Manav | Designed with HTML and Tailwind</p>
+  </footer>
+
+</body>
+</html>
