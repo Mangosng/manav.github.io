@@ -23,7 +23,7 @@ const Home = () => {
          <div className="border border-structure p-4">
            <iframe
              style={{ borderRadius: '0px' }}
-             src="https://open.spotify.com/embed/track/4WiiRw2PHMNQE0ad6y6GdD?utm_source=generator&theme=0"
+             src="https://open.spotify.com/embed/track/4WiiRw2PHMNQE0ad6y6GdD?utm_source=generator"
              width="100%"
              height="152"
              frameBorder="0"
