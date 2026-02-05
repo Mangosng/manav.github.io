@@ -4,17 +4,18 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       fontFamily: {
         mono: ["JetBrains Mono", "IBM Plex Mono", "Space Mono", "monospace"],
       },
       colors: {
-        canvas: "#E0E0E0",
-        ink: "#111111",
-        structure: "#BBBBBB",
-        highlight: "#444444",
-        invert: "#FFFFFF",
+        canvas: "var(--color-canvas)",
+        ink: "var(--color-ink)",
+        structure: "var(--color-structure)",
+        highlight: "var(--color-highlight)",
+        invert: "var(--color-invert)",
       },
       letterSpacing: {
         terminal: "0.05em",

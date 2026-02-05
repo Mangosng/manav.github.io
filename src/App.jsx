@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from './context/ThemeContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -11,21 +12,23 @@ import EventDashboard from './pages/scout4308/EventDashboard';
 
 function App() {
   return (
-    <Router>
-      <div className="min-h-screen flex flex-col font-body bg-dark text-light">
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/cv" element={<Cv />} />
-          <Route path="/do-they-like-me" element={<DoTheyLikeMe />} />
-          <Route path="/are-you-compatible" element={<AreYouCompatible />} />
-          <Route path="/scout4308" element={<ScoutHome />} />
-          <Route path="/scout4308/event/:eventKey" element={<EventDashboard />} />
-        </Routes>
-        <Footer />
-      </div>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <div className="min-h-screen flex flex-col font-mono bg-canvas text-ink">
+          <Header />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/cv" element={<Cv />} />
+            <Route path="/do-they-like-me" element={<DoTheyLikeMe />} />
+            <Route path="/are-you-compatible" element={<AreYouCompatible />} />
+            <Route path="/scout4308" element={<ScoutHome />} />
+            <Route path="/scout4308/event/:eventKey" element={<EventDashboard />} />
+          </Routes>
+          <Footer />
+        </div>
+      </Router>
+    </ThemeProvider>
   );
 }
 

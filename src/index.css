@@ -2,21 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Light mode (default) */
+:root {
+  --color-canvas: #E0E0E0;
+  --color-ink: #111111;
+  --color-structure: #BBBBBB;
+  --color-highlight: #444444;
+  --color-invert: #FFFFFF;
+}
+
+/* Dark mode (flipped) */
+:root.dark {
+  --color-canvas: #111111;
+  --color-ink: #E0E0E0;
+  --color-structure: #444444;
+  --color-highlight: #CCCCCC;
+  --color-invert: #000000;
+}
+
 @layer base {
   body {
     @apply bg-canvas text-ink font-mono antialiased;
     cursor: default;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 }
 
 @layer utilities {
   .border-dotted-structure {
     border-style: dotted;
-    border-color: #BBBBBB;
+    border-color: var(--color-structure);
   }
 
   .focus-terminal:focus {
-    outline: 1px dotted #111111;
+    outline: 1px dotted var(--color-ink);
     outline-offset: 2px;
   }
 
@@ -56,6 +75,6 @@
   }
 
   .divider-dotted {
-    border-top: 1px dotted #BBBBBB;
+    border-top: 1px dotted var(--color-structure);
   }
 }
