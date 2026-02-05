@@ -239,8 +239,11 @@ const TeamList = ({ teams, teamStats, scoutingData, eventKey, onScoutingUpdate }
                   </span>
                 )}
               </div>
-              <div className="text-xs uppercase tracking-terminal truncate mb-2">
+              <div className="text-xs uppercase tracking-terminal truncate mb-1">
                 {team.nickname}
+              </div>
+              <div className="text-xs tracking-terminal text-ink/50 group-hover:text-invert/50 truncate mb-2">
+                {[team.city, team.state_prov, team.country].filter(Boolean).join(', ')}
               </div>
               {scout ? (
                 <div className="text-xs uppercase tracking-terminal text-green-600 group-hover:text-green-300">
