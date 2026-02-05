@@ -156,45 +156,54 @@ const TeamList = ({ teams, teamStats, teamYearStats = {}, scoutingData, eventKey
     if (eventStats?.epa?.total) {
       return {
         epa: eventStats.epa.total,
+        unitless: null,
         opr: eventStats.opr || null,
         label: 'EPA',
         year: null,
         rank: null,
+        isCurrent: true,
       };
     }
 
     // Priority 2: Year stats from Statbotics
     if (yearStats) {
       const epa = yearStats.epa?.total_points?.mean;
+      const unitless = yearStats.epa?.unitless;
       const rank = yearStats.epa?.ranks?.total?.rank;
       const dataYear = yearStats.dataYear;
       
       if (dataYear === 2026 && epa) {
-        // Current year data
+        // Current year data - show EPA + unitless
         return {
           epa: epa,
+          unitless: unitless,
           opr: null,
           label: 'EPA',
-          year: null,
+          year: 2026,
           rank: null,
+          isCurrent: true,
         };
       } else if (rank) {
-        // Previous year - show rank
+        // Previous year - show rank + unitless
         return {
           epa: epa,
+          unitless: unitless,
           opr: null,
           label: `${dataYear} RANK`,
           year: dataYear,
           rank: rank,
+          isCurrent: false,
         };
       } else if (epa) {
         // Has EPA but no rank
         return {
           epa: epa,
+          unitless: unitless,
           opr: null,
           label: `${dataYear} EPA`,
           year: dataYear,
           rank: null,
+          isCurrent: false,
         };
       }
     }
@@ -308,11 +317,31 @@ const TeamList = ({ teams, teamStats, teamYearStats = {}, scoutingData, eventKey
               <div className="flex justify-between items-start mb-2">
                 <span className="text-lg font-bold">{team.team_number}</span>
                 {statsDisplay && (
-                  <div className="text-right">
-                    {statsDisplay.rank ? (
-                      <span className="text-xs uppercase tracking-terminal bg-canvas group-hover:bg-highlight px-2 py-1 border border-structure group-hover:border-invert">
-                        {statsDisplay.label}: #{statsDisplay.rank}
-                      </span>
+                  <div className="text-right flex flex-col gap-1">
+                    {statsDisplay.isCurrent ? (
+                      // 2026 data: show EPA + unitless
+                      <>
+                        <span className="text-xs uppercase tracking-terminal bg-canvas group-hover:bg-highlight px-2 py-1 border border-structure group-hover:border-invert">
+                          EPA: {statsDisplay.epa?.toFixed(1)}
+                        </span>
+                        {statsDisplay.unitless && (
+                          <span className="text-xs uppercase tracking-terminal text-ink/50 group-hover:text-invert/50">
+                            UNITLESS: {statsDisplay.unitless.toFixed(0)}
+                          </span>
+                        )}
+                      </>
+                    ) : statsDisplay.rank ? (
+                      // Previous year: show rank + unitless
+                      <>
+                        <span className="text-xs uppercase tracking-terminal bg-canvas group-hover:bg-highlight px-2 py-1 border border-structure group-hover:border-invert">
+                          {statsDisplay.label}: #{statsDisplay.rank}
+                        </span>
+                        {statsDisplay.unitless && (
+                          <span className="text-xs uppercase tracking-terminal text-ink/50 group-hover:text-invert/50">
+                            {statsDisplay.year} EPA: {statsDisplay.unitless.toFixed(0)}
+                          </span>
+                        )}
+                      </>
                     ) : statsDisplay.epa ? (
                       <span className="text-xs uppercase tracking-terminal bg-canvas group-hover:bg-highlight px-2 py-1 border border-structure group-hover:border-invert">
                         {statsDisplay.label}: {statsDisplay.epa.toFixed(1)}
