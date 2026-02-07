@@ -157,15 +157,45 @@ export function trainAndPredict(history, macroData, daysAhead = 1) {
   const rSquared = 1 - (sumSquaredError / sumSquaredTotal);
   const mae = sumAbsoluteError / testY.length;
   
+  // Get current price
+  const currentPrice = history[history.length - 1].close;
+  
   // Make prediction using latest data
   const latestFeatures = features[features.length - 1];
-  let prediction = model.predict(latestFeatures)[0];
+  let nextDayPrediction = model.predict(latestFeatures)[0];
   
-  // For multi-day predictions, apply simple adjustment
-  // (In production, use recursive forecasting)
-  if (daysAhead > 1) {
-    const avgDailyChange = (history[history.length - 1].close - history[history.length - 20].close) / 20;
-    prediction += avgDailyChange * (daysAhead - 1);
+  // Calculate the model's predicted daily change as a percentage
+  const modelDailyChangePercent = (nextDayPrediction - currentPrice) / currentPrice;
+  
+  // For multi-day predictions, use compound percentage change with heavy dampening
+  // The model predicts next-day, so we extrapolate cautiously
+  let prediction;
+  if (daysAhead <= 1) {
+    prediction = nextDayPrediction;
+  } else {
+    // Use historical volatility to inform prediction range
+    const recentPrices = history.slice(-60).map(h => h.close);
+    const avgPrice = recentPrices.reduce((a, b) => a + b, 0) / recentPrices.length;
+    
+    // Calculate historical daily returns
+    const returns = [];
+    for (let i = 1; i < recentPrices.length; i++) {
+      returns.push((recentPrices[i] - recentPrices[i-1]) / recentPrices[i-1]);
+    }
+    const avgDailyReturn = returns.reduce((a, b) => a + b, 0) / returns.length;
+    
+    // Dampen the effect significantly for longer time horizons
+    // Use mean reversion: blend model prediction with average price
+    const dampingFactor = Math.max(0.1, 1 / Math.sqrt(daysAhead));
+    
+    // Project forward using dampened daily return
+    const dampenedReturn = avgDailyReturn * dampingFactor;
+    prediction = currentPrice * Math.pow(1 + dampenedReturn, daysAhead);
+    
+    // Ensure prediction stays within reasonable bounds (±30% of current price)
+    const upperBound = currentPrice * 1.30;
+    const lowerBound = currentPrice * 0.70;
+    prediction = Math.max(lowerBound, Math.min(upperBound, prediction));
   }
   
   return {
