@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { fetchStockData, fetchMacroData, fetchCompanyInfo, formatTicker } from '../../lib/stockApi';
-import { trainAndPredict, daysBetween } from '../../lib/mlr';
+import { predictStock, formatTicker } from '../../lib/stockApi';
 import PredictionChart from './PredictionChart';
 
 const MARKETS = [
@@ -16,8 +15,6 @@ const StockPredictor = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [result, setResult] = useState(null);
-  const [stockData, setStockData] = useState(null);
-  const [companyInfo, setCompanyInfo] = useState(null);
 
   const handlePredict = async () => {
     if (!ticker.trim()) {
@@ -41,30 +38,8 @@ const StockPredictor = () => {
     setResult(null);
 
     try {
-      // Fetch all data in parallel
-      const [stockResult, macroResult, infoResult] = await Promise.all([
-        fetchStockData(ticker, market),
-        fetchMacroData(),
-        fetchCompanyInfo(ticker, market),
-      ]);
-
-      setStockData(stockResult);
-      setCompanyInfo(infoResult);
-
-      // Calculate days ahead
-      const daysAhead = daysBetween(today, target);
-
-      // Train model and predict
-      const prediction = trainAndPredict(stockResult.history, macroResult, daysAhead);
-
-      setResult({
-        ...prediction,
-        ticker: formatTicker(ticker, market),
-        targetDate,
-        daysAhead,
-        currency: stockResult.currency,
-        currentPrice: stockResult.history[stockResult.history.length - 1].close,
-      });
+      const prediction = await predictStock(ticker, market, targetDate);
+      setResult(prediction);
     } catch (err) {
       console.error('Prediction error:', err);
       setError(err.message || 'Failed to generate prediction');
@@ -89,7 +64,7 @@ const StockPredictor = () => {
         [ STOCK PRICE PREDICTOR ]
       </h1>
       <p className="text-sm text-ink/70 text-center mb-8 max-w-xl">
-        Multiple Linear Regression model using technical indicators (SMA, RSI, ATR) and macroeconomic data
+        Multiple Linear Regression model using technical indicators and macroeconomic data
       </p>
 
       <div className="w-full max-w-2xl">
@@ -167,9 +142,6 @@ const StockPredictor = () => {
                 <h2 className="text-xl font-bold uppercase tracking-terminal">
                   {result.ticker}
                 </h2>
-                {companyInfo?.name && (
-                  <p className="text-sm text-ink/70">{companyInfo.name}</p>
-                )}
               </div>
               <span className="text-xs uppercase tracking-terminal text-ink/50">
                 {result.currency}
@@ -183,64 +155,70 @@ const StockPredictor = () => {
                   CURRENT PRICE
                 </p>
                 <p className="text-2xl font-bold">
-                  ${result.currentPrice.toFixed(2)}
+                  ${result.current_price.toFixed(2)}
                 </p>
               </div>
               <div className="border border-structure p-4 bg-highlight/10">
                 <p className="text-xs uppercase tracking-terminal text-ink/70 mb-1">
-                  PREDICTED ({result.daysAhead} DAYS)
+                  PREDICTED ({result.days_ahead} DAYS)
                 </p>
                 <p className="text-2xl font-bold">
-                  ${result.predictedPrice.toFixed(2)}
+                  ${result.predicted_price.toFixed(2)}
                 </p>
-                <p className={`text-xs ${result.predictedPrice >= result.currentPrice ? 'text-green-600' : 'text-red-600'}`}>
-                  {result.predictedPrice >= result.currentPrice ? '▲' : '▼'} {' '}
-                  {(((result.predictedPrice - result.currentPrice) / result.currentPrice) * 100).toFixed(2)}%
+                <p className={`text-xs ${result.predicted_price >= result.current_price ? 'text-green-600' : 'text-red-600'}`}>
+                  {result.predicted_price >= result.current_price ? '▲' : '▼'} {' '}
+                  {(((result.predicted_price - result.current_price) / result.current_price) * 100).toFixed(2)}%
                 </p>
+              </div>
+            </div>
+
+            {/* Confidence Interval */}
+            <div className="border border-structure p-4 mb-6">
+              <p className="text-xs uppercase tracking-terminal text-ink/70 mb-2">
+                95% CONFIDENCE INTERVAL
+              </p>
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-mono">${result.lower_bound.toFixed(2)}</span>
+                <div className="flex-1 mx-4 h-2 bg-structure relative">
+                  <div 
+                    className="absolute h-full bg-highlight"
+                    style={{
+                      left: '0%',
+                      width: '100%',
+                    }}
+                  />
+                  <div 
+                    className="absolute w-3 h-3 bg-ink rounded-full -top-0.5"
+                    style={{
+                      left: `${Math.max(0, Math.min(100, ((result.predicted_price - result.lower_bound) / (result.upper_bound - result.lower_bound)) * 100))}%`,
+                      transform: 'translateX(-50%)',
+                    }}
+                  />
+                </div>
+                <span className="text-sm font-mono">${result.upper_bound.toFixed(2)}</span>
               </div>
             </div>
 
             {/* Model Metrics */}
             <div className="border-t border-dotted border-structure pt-4">
               <p className="text-xs uppercase tracking-terminal text-ink/70 mb-3">
-                MODEL ACCURACY METRICS
+                MODEL METRICS
               </p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+              <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
-                  <p className="text-lg font-bold">{(result.rSquared * 100).toFixed(1)}%</p>
+                  <p className="text-lg font-bold">{(result.r_squared * 100).toFixed(1)}%</p>
                   <p className="text-xs text-ink/50">R² SCORE</p>
                 </div>
                 <div>
-                  <p className="text-lg font-bold">${result.mae.toFixed(2)}</p>
-                  <p className="text-xs text-ink/50">MAE</p>
-                </div>
-                <div>
-                  <p className="text-lg font-bold">{result.trainingSize}</p>
+                  <p className="text-lg font-bold">{result.training_samples}</p>
                   <p className="text-xs text-ink/50">TRAIN SAMPLES</p>
                 </div>
                 <div>
-                  <p className="text-lg font-bold">{result.testSize}</p>
-                  <p className="text-xs text-ink/50">TEST SAMPLES</p>
+                  <p className="text-lg font-bold">{(result.volatility * 100).toFixed(2)}%</p>
+                  <p className="text-xs text-ink/50">DAILY VOL</p>
                 </div>
               </div>
             </div>
-          </div>
-        )}
-
-        {/* Chart */}
-        {stockData && result && (
-          <div className="border border-structure p-6">
-            <p className="text-xs uppercase tracking-terminal text-ink/70 mb-4">
-              PRICE HISTORY + PREDICTION
-            </p>
-            <PredictionChart
-              history={stockData.history}
-              prediction={{
-                date: result.targetDate,
-                price: result.predictedPrice,
-              }}
-              currency={result.currency}
-            />
           </div>
         )}
 

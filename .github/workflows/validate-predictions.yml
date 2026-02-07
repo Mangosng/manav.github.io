@@ -1,0 +1,21 @@
+name: Validate Stock Predictions (Nightly Cron)
+
+on:
+  schedule:
+    # Run every day at 23:00 UTC (after market close)
+    - cron: '0 23 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Validation Edge Function
+        run: |
+          curl -X POST \
+            'https://zolkdolzmwltqvsfsfcr.supabase.co/functions/v1/validate-predictions' \
+            -H 'Content-Type: application/json' \
+            -H 'Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}' \
+            -d '{}'
+        env:
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
