@@ -99,7 +99,7 @@ const Cv = () => {
                             </div>
                         </Item>
 
-                        <Item title="The Woodlands HOSA Chapter" period="2025 - Present">
+                        <Item title="The Woodlands HOSA Chapter" period="2025/2026">
                             <BulletList items={["Medical Spelling"]} />
                         </Item>
 
@@ -123,24 +123,51 @@ const Cv = () => {
                         </Item>
 
                         <div className="text-xs text-ink/70 space-y-1 mb-4 pl-4">
-                            <p>• The Woodlands Cross Country Team (2025/2026)</p>
+                            <p>• The Woodlands Cross Country Team (2025 - present)</p>
                             <p>• Member of Archery Club (2023/2024)</p>
                         </div>
                     </SubSection>
 
                     <SubSection title="Non-School">
-                        <div className="text-xs text-ink/70 space-y-1 pl-4">
-                            <p>• Toronto Model UN - Outreach Team</p>
-                            <p>• International Space Station Design Competition Runners Up - Dougeldyne Aerospace, Team Canada/Great Lakes</p>
-                            <p className="pl-4">- Good Samaritan Award</p>
-                            <p>• SHAD Summer Program - University of Calgary 2025</p>
-                            <p>• SHAD Ambassador</p>
+                        <Item title="Toronto Model UN">
+                            <BulletList items={["Outreach Team"]} />
+                        </Item>
+
+                        <Item title="2025 International Space Station Design Competition">
+                            <BulletList items={[
+                                "Team Canada/Great Lakes",
+                                "Dougeldyne Aerospace - Good Samaritan Award"
+                            ]} />
+                        </Item>
+
+                        <Item title="SHAD">
+                            <BulletList items={[
+                                "SHAD Fellow - University of Calgary (2025)",
+                                "SHAD Ambassador (2025 - 2026)"
+                            ]} />
+                        </Item>
+
+                        <Item title="STEMed Insights" period="2024 - 2025">
+                            <BulletList items={[
+                                "Content Team (2025)",
+                                "Newsletter Team (2024)"
+                            ]} />
+                        </Item>
+
+                        <div className="text-xs text-ink/70 space-y-1 mb-4 pl-4">
                             <p>• Youreka Canada Highschool Student Investigator (2025)</p>
                             <p>• JEC Council Member (2025)</p>
-                            <p>• Member of 3rd Streetsville Scouts Troop (2019 - 2023)</p>
-                            <p className="pl-4">- Patrol Leader (2023)</p>
-                            <p>• Member of 1st Streetsville Cub Scouts Troop (2017 - 2019)</p>
+                            <p>• BioYouths - BioHistorian (2025)</p>
+                            <p>• Leaf Machine Data Analysis - Data analyst (2025)</p>
                         </div>
+
+                        <Item title="Scouts Canada" period="2017 - 2023">
+                            <BulletList items={[
+                                "Member of 3rd Streetsville Scouts Troop (2019 - 2023)",
+                                "Patrol Leader (2023)",
+                                "Member of 1st Streetsville Cub Scouts Troop (2017 - 2019)"
+                            ]} />
+                        </Item>
                     </SubSection>
                 </Section>
 
@@ -154,14 +181,10 @@ const Cv = () => {
                     <div className="text-xs text-ink/70 space-y-1 pl-4">
                         <p>• City of Mississauga - Assistant Swimming Instructor - 109 hrs</p>
                         <p>• Sai Dham Food Bank - 56 hrs</p>
-                        <p>• Volunteering Peel Events - 16 hrs</p>
-                        <p>• Mississauga Youth Action Committee General Member - 8 hrs</p>
+                        <p>• Volunteering Peel - 16 hrs</p>
+                        <p>• Mississauga Youth Action Committee General Member - 19 hrs</p>
                         <p>• DECA Woodlands - 16 hrs</p>
-                        <p>• STEMed Insights</p>
-                        <p className="pl-4">- Content Team (2025)</p>
-                        <p className="pl-4">- Newsletter Team (2024)</p>
-                        <p>• BioYouths - BioHistorian</p>
-                        <p>• Leaf Machine Data Analysis - Data analyst</p>
+                        <p>• FIRST Robotics - 10 hrs</p>
                     </div>
                 </Section>
 
