@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Supabase Edge Function: predict-stock
 // Trains MLR model and returns stock price prediction
 
@@ -64,39 +65,37 @@ function calculateBounds(currentPrice: number, dailyVol: number, daysAhead: numb
 }
 
 // Fetch stock data from AlphaVantage
+// Fetch stock data from Polygon.io
 async function fetchStockData(ticker: string, apiKey: string) {
-  const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${ticker}&outputsize=full&apikey=${apiKey}`;
+  // Calculate date range (2 years ago to today)
+  const today = new Date();
+  const twoYearsAgo = new Date();
+  twoYearsAgo.setFullYear(today.getFullYear() - 2);
+  
+  const fromDate = twoYearsAgo.toISOString().split('T')[0];
+  const toDate = today.toISOString().split('T')[0];
+  
+  const url = `https://api.polygon.io/v2/aggs/ticker/${ticker}/range/1/day/${fromDate}/${toDate}?adjusted=true&sort=asc&limit=50000&apiKey=${apiKey}`;
   const response = await fetch(url);
   const data = await response.json();
   
-  if (data["Error Message"]) {
-    throw new Error(`AlphaVantage error: ${data["Error Message"]}`);
+  if (data.status !== "OK" && data.status !== "ok" && data.status !== "DELAYED") {
+    throw new Error(`Polygon error: ${data.error || data.status}`);
   }
   
-  if (data["Note"]) {
-    throw new Error("AlphaVantage API rate limit exceeded");
+  if (!data.results || data.results.length === 0) {
+    throw new Error("No data returned from Polygon");
   }
   
-  const timeSeries = data["Time Series (Daily)"];
-  if (!timeSeries) {
-    throw new Error("No data returned from AlphaVantage");
-  }
-  
-  // Convert to array sorted by date (oldest first)
-  const entries = Object.entries(timeSeries)
-    .map(([date, values]: [string, any]) => ({
-      date,
-      open: parseFloat(values["1. open"]),
-      high: parseFloat(values["2. high"]),
-      low: parseFloat(values["3. low"]),
-      close: parseFloat(values["4. close"]),
-      adjustedClose: parseFloat(values["5. adjusted close"]),
-      volume: parseFloat(values["6. volume"]),
-    }))
-    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-  
-  // Take last 2 years (approx 504 trading days)
-  return entries.slice(-504);
+  // Map Polygon results to our format
+  return data.results.map((d: any) => ({
+    date: new Date(d.t).toISOString().split('T')[0],
+    open: d.o,
+    high: d.h,
+    low: d.l,
+    close: d.c,
+    volume: d.v,
+  }));
 }
 
 // Fetch macro data from FRED
@@ -142,16 +141,17 @@ serve(async (req) => {
     }
     
     // Get API keys from environment
-    const alphavantageKey = Deno.env.get("ALPHAVANTAGE_API_KEY");
+    // Get API keys from environment
+    const polygonKey = Deno.env.get("POLYGON_API_KEY");
     const fredKey = Deno.env.get("FRED_API_KEY");
     
-    if (!alphavantageKey) {
-      throw new Error("ALPHAVANTAGE_API_KEY not configured");
+    if (!polygonKey) {
+      throw new Error("POLYGON_API_KEY not configured");
     }
     
     // Fetch data
     const [stockData, macroData] = await Promise.all([
-      fetchStockData(formattedTicker, alphavantageKey),
+      fetchStockData(formattedTicker, polygonKey),
       fetchMacroData(fredKey || ""),
     ]);
     

@@ -13,9 +13,9 @@ jobs:
       - name: Trigger Validation Edge Function
         run: |
           curl -X POST \
-            'https://zolkdolzmwltqvsfsfcr.supabase.co/functions/v1/validate-predictions' \
-            -H 'Content-Type: application/json' \
-            -H 'Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}' \
-            -d '{}'
+            "https://zolkdolzmwltqvsfsfcr.supabase.co/functions/v1/validate-predictions" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            -d "{}"
         env:
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
