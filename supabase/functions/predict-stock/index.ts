@@ -64,6 +64,33 @@ function calculateBounds(currentPrice: number, dailyVol: number, daysAhead: numb
   };
 }
 
+// Z-score Normalization
+function normalizeData(data: number[][]): { normalized: number[][], means: number[], stds: number[] } {
+  const numFeatures = data[0].length;
+  const means: number[] = new Array(numFeatures).fill(0);
+  const stds: number[] = new Array(numFeatures).fill(0);
+  const normalized: number[][] = [];
+
+  // Calculate means
+  for (const row of data) {
+    row.forEach((val, i) => means[i] += val);
+  }
+  means.forEach((sum, i) => means[i] = sum / data.length);
+
+  // Calculate stds
+  for (const row of data) {
+    row.forEach((val, i) => stds[i] += Math.pow(val - means[i], 2));
+  }
+  stds.forEach((sum, i) => stds[i] = Math.sqrt(sum / data.length) || 1); // Avoid div by zero
+
+  // Normalize
+  for (const row of data) {
+    normalized.push(row.map((val, i) => (val - means[i]) / stds[i]));
+  }
+
+  return { normalized, means, stds };
+}
+
 // Fetch stock data from AlphaVantage
 // Fetch stock data from Polygon.io
 async function fetchStockData(ticker: string, apiKey: string) {
@@ -195,14 +222,39 @@ serve(async (req) => {
       y.push([processedData[i + daysAhead].close]);
     }
     
-    // Train MLR model
-    const regression = new MLR(X, y);
+    // Normalize training data
+    const { normalized: X_norm, means, stds } = normalizeData(X);
+
+    // Train MLR model on normalized data
+    const regression = new MLR(X_norm, y);
     
-    // Predict using latest data
+    // Normalize latest features
     const latest = processedData[processedData.length - 1];
     const latestFeatures = [latest.close, latest.volume, latest.sma_20, latest.volatility, latest.fed_funds, latest.cpi];
+    const latest_norm = latestFeatures.map((val, i) => (val - means[i]) / stds[i]);
     
-    let prediction = regression.predict(latestFeatures)[0];
+    let prediction = regression.predict(latest_norm)[0];
+
+    // Calculate Feature Importance directly from coefficients (weights)
+    // Since inputs are Z-score normalized, coefficient magnitude = relative importance
+    const weights = regression.weights.slice(0, -1); // Exclude intercept (last element usually, but need to verify library)
+    // Actually, ml-regression-multivariate-linear weights array is [beta0, beta1, ... betaN] ? 
+    // Usually it's [beta1, beta2... betaN] and weights[weights.length] or separate intercept?
+    // Let's assume weights corresponds to X columns. If there's an intercept, it might be separate or handled.
+    // In ml-regression, weights usually matches X columns. Intercept is separate or included if X has column of 1s.
+    // ml-regression-multivariate-linear source: weights array length = X columns.
+    
+    // Let's calculate percentage contribution of absolute weights
+    const absWeights = regression.weights.map((w: number) => Math.abs(w));
+    const totalWeight = absWeights.reduce((a: number, b: number) => a + b, 0);
+    const featureImportance = {
+      "Price": (absWeights[0] / totalWeight) * 100,
+      "Volume": (absWeights[1] / totalWeight) * 100,
+      "SMA_20": (absWeights[2] / totalWeight) * 100,
+      "Volatility": (absWeights[3] / totalWeight) * 100,
+      "Fed Funds": (absWeights[4] / totalWeight) * 100,
+      "CPI": (absWeights[5] / totalWeight) * 100
+    };
     
     // Apply dynamic clamping (2-sigma rule)
     const { lower, upper } = calculateBounds(latest.close, latest.volatility, daysAhead);
@@ -211,7 +263,7 @@ serve(async (req) => {
     // Calculate R² on training data
     let ssRes = 0, ssTot = 0;
     const meanY = y.reduce((a, b) => a + b[0], 0) / y.length;
-    X.forEach((x, i) => {
+    X_norm.forEach((x, i) => {
       const pred = regression.predict(x)[0];
       ssRes += Math.pow(pred - y[i][0], 2);
       ssTot += Math.pow(y[i][0] - meanY, 2);
@@ -260,6 +312,7 @@ serve(async (req) => {
         r_squared: Math.round(rSquared * 1000) / 1000,
         training_samples: X.length,
         volatility: Math.round(latest.volatility * 10000) / 10000,
+        feature_importance: featureImportance,
       }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },

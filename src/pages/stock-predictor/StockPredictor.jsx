@@ -199,6 +199,33 @@ const StockPredictor = () => {
               </div>
             </div>
 
+            {/* Feature Importance */}
+            {result.feature_importance && (
+              <div className="border border-structure p-4 mb-6">
+                <p className="text-xs uppercase tracking-terminal text-ink/70 mb-4">
+                  MODEL DRIVERS (FEATURE IMPORTANCE)
+                </p>
+                <div className="space-y-3">
+                  {Object.entries(result.feature_importance)
+                    .sort(([, a], [, b]) => b - a)
+                    .map(([feature, importance]) => (
+                      <div key={feature}>
+                        <div className="flex justify-between text-xs uppercase tracking-terminal mb-1">
+                          <span>{feature}</span>
+                          <span className="font-mono">{importance.toFixed(1)}%</span>
+                        </div>
+                        <div className="w-full h-2 bg-structure">
+                          <div
+                            className="h-full bg-ink"
+                            style={{ width: `${importance}%` }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
+
             {/* Model Metrics */}
             <div className="border-t border-dotted border-structure pt-4">
               <p className="text-xs uppercase tracking-terminal text-ink/70 mb-3">
@@ -214,7 +241,7 @@ const StockPredictor = () => {
                   <p className="text-xs text-ink/50">TRAIN SAMPLES</p>
                 </div>
                 <div>
-                  <p className="text-lg font-bold">{(result.volatility * 100).toFixed(2)}%</p>
+                  <p className="text-lg font-bold">{result.volatility.toFixed(4)}</p>
                   <p className="text-xs text-ink/50">DAILY VOL</p>
                 </div>
               </div>
