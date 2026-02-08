@@ -342,8 +342,12 @@ serve(async (req) => {
     // Normalize training data
     const { normalized: X_norm, means, stds } = normalizeData(X);
 
-    // Train Ridge Regression model (Lambda = 1.0)
-    const regression = new RidgeRegression(X_norm, y, 1.0);
+    // Center y (Target) for Ridge Regression (since we don't have an intercept)
+    const meanY = y.reduce((a, b) => a + b[0], 0) / y.length;
+    const y_centered = y.map(row => [row[0] - meanY]);
+
+    // Train Ridge Regression model (Lambda = 1.0) on centered data
+    const regression = new RidgeRegression(X_norm, y_centered, 1.0);
     
     // Get coefficients
     const coefficients = regression.getCoefficients(); 
@@ -364,8 +368,9 @@ serve(async (req) => {
     // Normalize latest features
     const latestFeaturesNorm = latestFeatures.map((val, i) => (val - means[i]) / stds[i]);
     
-    // Predict
-    let prediction = regression.predict(latestFeaturesNorm);
+    // Predict (add meanY back)
+    let raw_prediction = regression.predict(latestFeaturesNorm);
+    let prediction = raw_prediction + meanY;
     
     // Apply dynamic clamping (2-sigma rule)
     const { lower, upper } = calculateBounds(latest.close, latest.volatility, daysAhead);
@@ -383,11 +388,12 @@ serve(async (req) => {
     });
 
     // 2. R-Squared (In-Sample Fit)
+    // Compare actual y vs (predicted_centered + meanY)
     let ssRes = 0, ssTot = 0;
-    const meanY = y.reduce((a, b) => a + b[0], 0) / y.length;
     X_norm.forEach((x, i) => {
-      const pred = regression.predict(x);
-      ssRes += Math.pow(pred - y[i][0], 2);
+      const pred_centered = regression.predict(x);
+      const pred_actual = pred_centered + meanY;
+      ssRes += Math.pow(pred_actual - y[i][0], 2);
       ssTot += Math.pow(y[i][0] - meanY, 2);
     });
     const rSquared = Math.max(0, 1 - ssRes / ssTot);
@@ -397,7 +403,8 @@ serve(async (req) => {
     let totalSamples = 0;
     
     X_norm.forEach((x, i) => {
-      const predPrice = regression.predict(x);
+      const pred_centered = regression.predict(x);
+      const predPrice = pred_centered + meanY;
       const actualPrice = y[i][0];
       const currentPriceAtT = X[i][0]; // Original Close price is at index 0
       
